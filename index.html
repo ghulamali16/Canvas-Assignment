@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+    <link rel="stylesheet" href="./style.css" />
+   
+  </head>
+  <body>
+<section id="drawingcanvas">
+   
+    <canvas id="myCanvas" class="mycanvas" >
+        Your browser does not support the HTML canvas tag.
+        </canvas>
+        <div>
+            <div class="footer"></div>
+            <input type="file" id="fileinput" class="filebtn" width="500" height="800" accept = "image/*">  
+         </div>
+         <input type="text" name="" id="headertext" class="textinput" placeholder="Write for Header">
+         <br>
+         <input type="text" id="footertext" class="textinput" placeholder="Write for Footer">
+        <input type="submit" class="submit" onclick="canvasWrite()">
+        <br>
+        <a id="download" class="downloadbtn" download="myCanvas.png" href="" onclick="canvasSave(this);">Download Canvas</a>
+
+    </section>
+<script>
+
+let fileInput = document.getElementById('fileinput');
+fileInput.addEventListener('change', function(ev) {
+   if(ev.target.files) {
+      let file = ev.target.files[0];
+      var reader  = new FileReader();
+      reader.readAsDataURL(file);
+
+      reader.onloadend = function (e) {
+          var image = new Image();
+          image.src = e.target.result;
+
+        //Draws the image onto the canvas with
+        //keeping the same width and height as of image 
+          image.onload = function(ev) {
+             var canvas = document.getElementById('myCanvas');
+             canvas.width = image.width;
+             canvas.height = image.height;
+             var ctx = canvas.getContext('2d');
+             ctx.drawImage(image,0,0);
+         }
+      }
+   }
+})
+function canvasWrite(){
+
+//fetch userinput
+var headertext = document.getElementById("headertext");
+var footertext = document.getElementById("footertext");
+
+//draw onto canvas
+var c = document.getElementById("myCanvas");
+var ctx = c.getContext("2d");
+ctx.font = "30px bold";
+ctx.fillStyle = "Black";
+ctx.fillText(headertext.value,c.width/2,25);
+ctx.fillText(footertext.value,c.width/2,c.height - 10);
+
+}
+
+function canvasSave(element){
+  var canvas = document.getElementById("myCanvas");
+
+  //converts the data into image and encoding type for image is jpg
+  var image = canvas.toDataURL("image/png");
+
+  //the element is assigned the image object to href link property of anchor tag
+  element.href = image;
+}
+</script>
+
+  </body>
+</html>
